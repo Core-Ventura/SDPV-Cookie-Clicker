@@ -9,6 +9,10 @@ body {
 	background-repeat: repeat; 
 }
 
+footer {
+  display: block;
+}
+
 #container {
 	z-index:-1;
 }
