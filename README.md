@@ -9,3 +9,5 @@ Las APIS utilizadas han sido:
 2. **Web Audio API** para los sonidos al clickar.
 3. **MouseEvent** para generar clicks de ratón.
 4. **Fullscreen API** para poner el videojuego a pantalla completa (opcional a través de botón).
+
+Página validada con Unicorn de WC3.
