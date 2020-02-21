@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cookies!</title>
+
+	<link href="css/webglbook.css" rel="stylesheet" /> 
+	<script src="libs/Three.js"></script>
+	<script src="libs/jquery-1.6.4.js"></script>
+    <script src="libs/jquery.mousewheel.js"></script>
+	<script src="libs/RequestAnimationFrame.js"></script>
+	<script src="sim/sim.js"></script>
+
+	<script src="sim/ColladaLoader.js"></script>
+	<script src="cookie-game.js"></script>
+	<script>
+
+	var renderer = null;
+	var scene = null;
+	var camera = null;
+	var mesh = null;
+
+	var cookies = 0;
+	var cookieSound = new Audio("sounds/coin.mp3");
+	var nUpgrades = 0;
+	var upgradeCost = 20;
+	var nAuto = 0;
+	var autoCost = 30;
+
+	$(document).ready(
+		function() {
+			var container = document.getElementById("container");
+			var app = new CookieApp();
+			app.init({ container: container });
+			app.run();
+		}
+	);
+	
+	function initializeFunction() {
+	  document.getElementById("score").innerHTML = cookies;
+	  document.getElementById("cost").innerHTML = upgradeCost;
+	  document.getElementById("cpc").innerHTML = 1 + nUpgrades;
+	  document.getElementById("autoCost").innerHTML = autoCost;
+	  document.getElementById("cps").innerHTML = nAuto;
+	}
+
+	// CLICKS & SOUND EFFECTS
+	function clickFunction() {
+		cookies = cookies + 1 + nUpgrades;
+		document.getElementById("score").innerHTML = cookies;
+		cookieSound.currentTime=0;
+		cookieSound.play();	
+	}	
+
+	function buyUpgrade() {
+		if(cookies >= upgradeCost)
+		{
+			cookies = cookies - upgradeCost;
+			nUpgrades++;
+			upgradeCost *= 2;
+			document.getElementById("cost").innerHTML = upgradeCost;
+			document.getElementById("cpc").innerHTML = 1 + nUpgrades;
+		}
+	}
+
+	function buyAuto() {
+		if(cookies >= autoCost)
+		{
+			autoCookie();
+			cookies = cookies - autoCost;
+			nAuto++;
+			autoCost *= 2;
+			document.getElementById("autoCost").innerHTML = autoCost;
+			document.getElementById("cps").innerHTML = nAuto;
+		}
+	}
+
+	function autoCookie(){
+		// do whatever you like here
+		cookies = cookies + nAuto;
+		document.getElementById("score").innerHTML = cookies;
+    	setTimeout(autoCookie, 1000);
+	}
+
+	/* Get the documentElement (<html>) to display the page in fullscreen */
+		var elem = document.documentElement;
+		var fullscreenActivated = false;
+
+	/* View in fullscreen */
+	function openFullscreen() {
+
+		if(fullscreenActivated == false)
+		{
+			fullscreenActivated = true;
+			if (elem.requestFullscreen) {
+			elem.requestFullscreen();
+			} else if (elem.mozRequestFullScreen) { /* Firefox */
+				elem.mozRequestFullScreen();
+			} else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+				elem.webkitRequestFullscreen();
+			} else if (elem.msRequestFullscreen) { /* IE/Edge */
+				elem.msRequestFullscreen();
+			}
+		} else {
+			fullscreenActivated = false;
+			if (document.exitFullscreen) {
+			document.exitFullscreen();
+			} else if (document.mozCancelFullScreen) { /* Firefox */
+				document.mozCancelFullScreen();
+			} else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+				document.webkitExitFullscreen();
+			} else if (document.msExitFullscreen) { /* IE/Edge */
+				document.msExitFullscreen();
+			}
+		}
+	}
+
+
+
+	</script>
+
+</head>
+<body onload="initializeFunction()" onclick="clickFunction()">
+	<center><h1><span id="score"></span> Cookies!</h1></center>
+	<center><h2><span id="cpc"></span> Cookies Per Click</h2></center>
+	<center><h2><span id="cps"></span> Cookies Per Second</h2></center>
+    <div id="container" style="width:95%; height:80%; position:absolute;"></div>
+	<div id="prompt" style="width:95%; height:6%; bottom:0px; text-align:center; position:absolute;">
+	Click to gain cookies!
+	</div>
+
+	<div class="button" id="button-3" onclick="openFullscreen()">
+		<div id="circle"></div>
+		<a href="#">FULLSCREEN</a>
+	</div>
+
+	<div class="button" id="button-3" onclick="buyUpgrade()">
+		<div id="circle"></div>
+		<a href="#">UPGRADE CLICK <span id="cost"></span></a>
+	</div>
+
+	<div class="button" id="button-3" onclick="buyAuto()">
+		<div id="circle"></div>
+		<a href="#">UPGRADE AUTO <span id="autoCost"></span></a>
+	</div>
+
+</body>
+</html>
